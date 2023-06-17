@@ -9,12 +9,12 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     // Show Register/Create Form
-    public function create() {
+    public function create(){
         return view('users.register');
     }
 
     // Create New User
-    public function store(Request $request) {
+    public function store(Request $request){
         $formFields = $request->validate([
             'name' => ['required', 'min:3'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
@@ -22,7 +22,7 @@ class UserController extends Controller
         ]);
 
         // Hash Password
-        $formFields['password'] = bcrypt($formFields['password']);
+        $formFields['password'] =  bcrypt($formFields['password']);
 
         // Create User
         $user = User::create($formFields);
@@ -34,7 +34,7 @@ class UserController extends Controller
     }
 
     // Logout User
-    public function logout(Request $request) {
+    public function logout(Request $request){
         auth()->logout();
 
         $request->session()->invalidate();
@@ -49,15 +49,15 @@ class UserController extends Controller
         return view('users.login');
     }
 
-    // Authenticate User
-    public function authenticate(Request $request) {
+    // Authenticate User 
+    public function authenticate(Request $request){
         $formFields = $request->validate([
             'email' => ['required', 'email'],
             'password' => 'required'
         ]);
 
         if(auth()->attempt($formFields)) {
-            $request->session()->regenerate();
+            $request->session()->regenerate(); 
 
             return redirect('/')->with('message', 'You are now logged in!');
         }
